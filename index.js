@@ -5,6 +5,7 @@ import colors from 'colors';
 
 let r = connect();
 
+// create the tappr database
 let createDatabase = (config) => {
   console.log(`Using or creating ${config.databaseName} database.`.blue);
   return new Promise((resolve, reject) => {
@@ -23,6 +24,7 @@ let createDatabase = (config) => {
   });
 };
 
+// create the files database
 let createTable = (config) => {
   console.log(`Using or creating ${config.tableName} table.`.blue);
   return new Promise((resolve, reject) => {
@@ -38,6 +40,7 @@ let createTable = (config) => {
   });
 };
 
+// setup database artifacts
 let configureDatabase = () => {
   let config = {
     databaseName: 'tappr',
@@ -48,6 +51,7 @@ let configureDatabase = () => {
     .then(createTable);
 };
 
+// bulk insert a bunch of records
 let bulkInsertFiles = () => {
   let files = _.range(1, 1000).map((index) => {
     return {
@@ -65,6 +69,14 @@ let bulkInsertFiles = () => {
   });
 };
 
+// subscribe to the files table changefeed
+let subscribeToChangeFeed = () => {
+  r.db('tappr').table('files').changes().run({cursor: true}).then((cursor) => {
+    cursor.each(console.log);
+  });
+};
+
+// delete everything in the files table
 let purgeFiles = () => {
   console.log("Purging files table.".blue);
   return new Promise((resolve, reject) => {
@@ -76,6 +88,9 @@ let purgeFiles = () => {
 
 configureDatabase()
   .then(bulkInsertFiles)
-  .then(purgeFiles)
-  .then(() => r.getPoolMaster().drain());
+  .then(subscribeToChangeFeed)
+  // .then(purgeFiles)
+  // .then(() => r.getPoolMaster().drain());
+
+
 
