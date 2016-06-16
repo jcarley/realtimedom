@@ -72,8 +72,22 @@ let bulkInsertFiles = () => {
 // subscribe to the files table changefeed
 let subscribeToChangeFeed = () => {
   r.db('tappr').table('files').changes().run({cursor: true}).then((cursor) => {
-    cursor.each(console.log);
+    cursor.each(logAction);
   });
+};
+
+let logAction = (err, changeRecord) => {
+  let type = "";
+  if (changeRecord.new_val != null && changeRecord.old_val == null) {
+    type = "Record inserted".green;
+  } else if (changeRecord.new_val != null && changeRecord.old_val != null) {
+    type = "Record updated".green;
+  } else if (changeRecord.new_val == null && changeRecord.old_val != null) {
+    type = "Record deleted".green;
+  }
+
+  console.log(type);
+  console.log(changeRecord);
 };
 
 // delete everything in the files table

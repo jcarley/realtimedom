@@ -10,15 +10,15 @@ r.db('tappr').table('files').insert({
 
 // update an existing record
 r.db('tappr').table('files')
-  .get('28aeade3-49c7-4687-890c-2d49f6c11ee5')
+  .get('d30172ec-4413-4b69-bc59-8f654b9cba23')
   .update({name: 'Bob'})
 
 
 // replace a record (insert, delete, or update)
 r.db('tappr').table('files')
-  .get('28aeade3-49c7-4687-890c-2d49f6c11ee5')
+  .get('d30172ec-4413-4b69-bc59-8f654b9cba23')
   .replace({
-    id: '28aeade3-49c7-4687-890c-2d49f6c11ee5',
+    id: 'd30172ec-4413-4b69-bc59-8f654b9cba23',
     name: 'Bob',
     size: 2048,
     dateImported: Date.now()
@@ -26,5 +26,5 @@ r.db('tappr').table('files')
 
 // delete a record
 r.db('tappr').table('files')
-  .get('28aeade3-49c7-4687-890c-2d49f6c11ee5')
+  .get('d30172ec-4413-4b69-bc59-8f654b9cba23')
   .delete()
