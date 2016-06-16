@@ -1,11 +1,12 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
 import connect from 'rethinkdbdash';
+import colors from 'colors';
 
 let r = connect();
 
 let createDatabase = (config) => {
-  console.log(1, `Using or creating ${config.databaseName} database.`);
+  console.log(`Using or creating ${config.databaseName} database.`.blue);
   return new Promise((resolve, reject) => {
     r.dbList().run().then((result) => {
       if (!result.includes(config.databaseName)) {
@@ -23,7 +24,7 @@ let createDatabase = (config) => {
 };
 
 let createTable = (config) => {
-  console.log(2, `Using or creating ${config.tableName} table.`);
+  console.log(`Using or creating ${config.tableName} table.`.blue);
   return new Promise((resolve, reject) => {
     r.db(config.databaseName).tableList().run().then((result) => {
       if (!result.includes(config.tableName)) {
@@ -56,7 +57,7 @@ let bulkInsertFiles = () => {
     }
   });
 
-  console.log(3, "Bulk inserting test records");
+  console.log("Bulk inserting test records".blue);
   return new Promise((resolve, reject) => {
     r.db('tappr').table('files').insert(files).run().then((result) => {
       resolve(result);
@@ -65,7 +66,7 @@ let bulkInsertFiles = () => {
 };
 
 let purgeFiles = () => {
-  console.log(4, "Purging files table.");
+  console.log("Purging files table.".blue);
   return new Promise((resolve, reject) => {
     r.db('tappr').table('files').delete().run().then((result) => {
       resolve();
