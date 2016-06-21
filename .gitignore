@@ -1,3 +1,4 @@
 data/
 node_modules/
+cluster/
 .DS_Store
